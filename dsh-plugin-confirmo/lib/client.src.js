@@ -17,9 +17,24 @@ window.__ModuleLoader__.load({
 		var MJ_SPRITE = {
 			id: "mj-v4",
 			name: "MJ",
-			spriteUrl: "/confirmo/local/mj/sheet.png?v=4",
-			thumbnailUrl: "/confirmo/local/mj/thumb.png?v=4",
-			processedThumbnailUrl: "/confirmo/local/mj/thumb.png?v=4",
+			spriteUrl: "/confirmo/local/mj/sheet.png?v=6",
+			thumbnailUrl: "/confirmo/local/mj/thumb.png?v=6",
+			processedThumbnailUrl: "/confirmo/local/mj/thumb.png?v=6",
+			frameWidth: 256,
+			frameHeight: 256,
+			frameCount: 56,
+			local: true,
+			preprocessed: true
+		};
+
+		// Built-in optional sprite "MC": same pipeline as MJ, bundled in
+		// assets/mc/ and selectable from the context menu.
+		var MC_SPRITE = {
+			id: "mc",
+			name: "MC",
+			spriteUrl: "/confirmo/local/mc/sheet.png?v=2",
+			thumbnailUrl: "/confirmo/local/mc/thumb.png?v=2",
+			processedThumbnailUrl: "/confirmo/local/mc/thumb.png?v=2",
 			frameWidth: 256,
 			frameHeight: 256,
 			frameCount: 56,
@@ -726,12 +741,20 @@ window.__ModuleLoader__.load({
 			}
 
 			function isAgentWorking() {
-				// The chat view renders a `role="status"` "Deep diving…" label only
-				// while a turn is open, and assistant messages carry data-streaming
-				// while streaming — either means the agent is busy.
+				// Primary signal: DSH mounts the running indicator with
+				// `data-chat-running` on it only while the session is running
+				// (lib/types/client/chat/RunningStatus.js) — purpose-built and
+				// removed as soon as the turn ends.
+				//
+				// Do NOT test `[role="status"][aria-live="polite"]`: DSH also uses
+				// that pattern for the per-turn screen-reader announcements
+				// ("worked"/"stopped"/"failed") that stay in the transcript after a
+				// turn closes, which pinned the pet to Working forever.
 				try {
-					return !!document.querySelector('[role="status"][aria-live="polite"]') ||
-						!!document.querySelector("[data-streaming]");
+					if (document.querySelector("[data-chat-running]")) return true;
+					// secondary: streaming assistant markdown / reasoning text
+					// (covers the brief gaps between tool calls of a running turn)
+					return !!document.querySelector("[data-streaming]");
 				} catch (e) { return false; }
 			}
 
@@ -1252,8 +1275,8 @@ window.__ModuleLoader__.load({
 					} catch (e) {}
 					if (!base.length) base = SPRITE_LIST;
 				}
-				// built-in default sprite always first
-				return [MJ_SPRITE].concat(base);
+				// built-in sprites always first
+				return [MJ_SPRITE, MC_SPRITE].concat(base);
 			}
 			function normalizeSpriteList(raw) {
 				var out = [];
@@ -1507,9 +1530,9 @@ window.__ModuleLoader__.load({
 
 				function renderGrid() {
 					grid.innerHTML = "";
-					grid.appendChild(makeItem(MJ_SPRITE.id, MJ_SPRITE.name, MJ_SPRITE.thumbnailUrl, MJ_SPRITE.processedThumbnailUrl));
+					// built-in sprites (MJ, MC) first, then the community list
 					var list = getSpriteList();
-					for (var i = 1; i < list.length; i++) {
+					for (var i = 0; i < list.length; i++) {
 						grid.appendChild(makeItem(list[i].id, list[i].name, list[i].thumbnailUrl, list[i].processedThumbnailUrl));
 					}
 				}

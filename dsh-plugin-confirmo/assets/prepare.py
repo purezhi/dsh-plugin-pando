@@ -42,10 +42,20 @@ BASELINE = CELL - 14          # 242px from the top: feet rest here
 
 
 def is_transparent(r, g, b, a):
-    """Background = fully transparent OR pure/near magenta."""
+    """Background = fully transparent OR magenta-family.
+
+    Raw sheets key pure magenta #FF00FF but JPEG/AI output drifts it
+    (e.g. RGB 232,4,230) and anti-aliased edges blend it with the character
+    (down to ~180). Use a magenta-family test with a tolerance so those edge
+    halos are removed too: red & blue high, green near zero.
+    """
     if a < 128:
         return True
-    return r > 200 and g < 80 and b > 200
+    if g < 120 and r > 140 and b > 140:
+        # high-saturation magenta: red and blue both well above green
+        if (r - g) + (b - g) > 180:
+            return True
+    return False
 
 
 def find_source(d):
