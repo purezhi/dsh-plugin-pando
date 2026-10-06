@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Pando Desktop Pet",
+    "description": "A desktop pet for the DSH UI: a replica of the confirmo.love companion. Supports a local sprite directory and community sprite sheets. Drag to move, right-click to switch sprite, click to interact."
+  }
+}

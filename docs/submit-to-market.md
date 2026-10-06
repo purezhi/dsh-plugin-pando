@@ -1,7 +1,7 @@
 # 提交插件到 DSH 插件市场
 
 本文说明如何把 dsh 插件提交到 DSH 内置的**社区插件市场**（`dsh-community-market`，即 Desktop「设置 → 插件 → 插件市场」）。
-以本仓库 `dsh-plugin-confirmo` 的提交过程为例。
+以本仓库 `dsh-plugin-pando` 的提交过程为例。
 
 ## 市场机制简介
 
@@ -41,8 +41,8 @@ DSH Community Market 本身**不维护插件目录**，它是一个「壳」：�
 
    ```yaml
    - insert:
-       - id: confirmo
-         name: dsh-plugin-confirmo
+       - id: pando
+         name: dsh-plugin-pando
    ```
 
    上游静态校验会检查：patch 字段非空、patch 文件在同一提交中存在。**缺失会直接拒绝 PR。**
@@ -50,7 +50,7 @@ DSH Community Market 本身**不维护插件目录**，它是一个「壳」：�
 2. **`package.json` 声明 `repository`**（指向 GitHub 仓库，为后续 npm 发布/回链校验做准备）：
 
    ```json
-   "repository": { "type": "git", "url": "https://github.com/purezhi/dsh-plugin-confirmo" }
+   "repository": { "type": "git", "url": "https://github.com/purezhi/dsh-plugin-pando" }
    ```
 
 3. **仓库添加 `dsh-plugin` GitHub topic**（同时满足 dshfind 自动发现）：
@@ -70,13 +70,13 @@ DSH Community Market 本身**不维护插件目录**，它是一个「壳」：�
    ```json
    {
      "$schema": "../schema/plugin.schema.json",
-     "id": "purezhi/dsh-plugin-confirmo",
-     "name": "dsh-plugin-confirmo",
-     "repository": "https://github.com/purezhi/dsh-plugin-confirmo",
+     "id": "purezhi/dsh-plugin-pando",
+     "name": "dsh-plugin-pando",
+     "repository": "https://github.com/purezhi/dsh-plugin-pando",
      "category": "ui",
      "description": {
        "en": "A confirmo.love-style desktop pet for the DSH Web UI with community sprite support.",
-       "zh": "在 DSH Web UI 里放一只 Confirmo 桌宠，支持社区精灵图。"
+       "zh": "在 DSH Web UI 里放一只 Pando 桌宠，支持社区精灵图。"
      },
      "added": "2026-08-23"
    }
@@ -94,7 +94,7 @@ DSH Community Market 本身**不维护插件目录**，它是一个「壳」：�
 ### 本插件的提交记录
 
 - PR: https://github.com/imsai-sh/awesome-deepseek-harness-plugins/pull/174（已合并）
-- 投稿文件: `docs/submission/purezhi--dsh-plugin-confirmo.json`
+- 投稿文件: `docs/submission/purezhi--dsh-plugin-pando.json`
 - 合并后 `Catalog sync` workflow 会推送目录到 deepseek1024.com（同步为异步排队，稍候可见）
 
 ### （可选）让插件进入市场「可安装」标签页

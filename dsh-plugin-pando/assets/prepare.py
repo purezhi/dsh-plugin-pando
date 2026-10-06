@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Prepare a Confirmo sprite sheet: normalize any AI-generated 8x7 sheet into a
+Prepare a Pando sprite sheet: normalize any AI-generated 8x7 sheet into a
 clean, runtime-ready 2048x1792 RGBA sheet (8x7 @ 256x256 frames).
 
 Input : <dir>/source.png|jpeg|jpg  — raw sheet, ANY size, 8x7 grid,
@@ -69,10 +69,12 @@ def find_source(d):
 def detect_row_bounds(px, W, H):
     """Find the real top/bottom of each of the 7 rows.
 
-    Rather than requiring a fully blank band (AI rows often touch), split at
-    the local MINIMA of the per-row content density: each minimum between two
-    content-heavy areas is a row boundary candidate, and we keep the 6 deepest
-    valleys (7 rows).
+    AI sheets have roughly regular row pitch, and the gap between two rows is a
+    local minimum of the per-row content density. Snapping each EXPECTED
+    boundary (i * H / ROWS) to the deepest minimum inside a +/-30%-row window
+    is robust: it adapts to pitch drift, and it cannot pick two minima from the
+    same wide blank band (which would create a sliver row and merge two real
+    rows — the earlier global "6 deepest minima" rule did exactly that).
     """
     density = []
     for y in range(H):
@@ -89,18 +91,28 @@ def detect_row_bounds(px, W, H):
         hi = min(H, y + 3)
         sm.append(sum(density[lo:hi]) / (hi - lo))
 
-    # candidates: local minima that are clearly below the neighbouring peaks,
-    # excluding the extreme top/bottom edges (they are always "blank")
-    margin = max(2, H // 30)
-    candidates = []
-    for y in range(margin, H - margin):
-        if sm[y] <= sm[y - 1] and sm[y] <= sm[y + 1] and sm[y] < ROW_BAND:
-            if not candidates or y - candidates[-1] > MIN_ROW_GAP * 2:
-                candidates.append(y)
-    # keep the 6 deepest minima = boundaries between the 7 rows
-    candidates.sort(key=lambda y: sm[y])
-    cuts = sorted(candidates[:ROWS - 1])
-    print("row boundary cuts (y):", cuts)
+    row_h = H / ROWS
+    window = int(row_h * 0.30)
+    cuts = []
+    for i in range(1, ROWS):
+        expect = int(round(i * row_h))
+        lo = max(1, expect - window)
+        hi = min(H - 2, expect + window)
+        # deepest (lowest density) position inside the window
+        best_y, best_d = expect, sm[expect]
+        for y in range(lo, hi + 1):
+            if sm[y] < best_d:
+                best_d, best_y = sm[y], y
+        cuts.append(best_y)
+    # enforce strictly increasing, with a sane minimum row height
+    min_row = int(row_h * 0.40)
+    fixed = []
+    for c in cuts:
+        if fixed and c - fixed[-1] < min_row:
+            c = fixed[-1] + min_row
+        fixed.append(min(c, H - 1 - (ROWS - 1 - len(fixed)) * min_row))
+    cuts = sorted(set(fixed))
+    print("row boundary cuts (y):", cuts, " expected:", [int(round(i * row_h)) for i in range(1, ROWS)])
 
     bounds = []
     top = 0

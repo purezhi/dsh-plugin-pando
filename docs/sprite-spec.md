@@ -1,7 +1,7 @@
-# Confirmo 精灵图（Sprite Sheet）规范
+# Pando 精灵图（Sprite Sheet）规范
 
 本文件记录 confirmo.love 社区精灵图画廊 [sprites.confirmo.love](https://sprites.confirmo.love/) 的精灵图制作规范。
-本插件（`dsh-plugin-confirmo`）的抠图流水线、7 状态播放引擎与 README 中的状态表均以此规范为准。
+本插件（`dsh-plugin-pando`）的抠图流水线、7 状态播放引擎与 README 中的状态表均以此规范为准。
 
 > 规范来源：sprites.confirmo.love 网站上传页（`/upload`）与网站内置 AI 生成提示词模板（前端 JS 内嵌，中英文各一份）。
 > 官方没有独立的规范文档页面；上传页只显示简短摘要（格式、网格、推荐尺寸），完整要求内嵌于网站代码。

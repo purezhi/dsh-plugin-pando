@@ -1,4 +1,4 @@
-# Confirmo 精灵图 AI 生成提示词
+# Pando 精灵图 AI 生成提示词
 
 本文提供可直接投喂给 AI 图像生成器（DALL·E 3 / Midjourney / Stable Diffusion / 即梦 / 文心一格 等）的提示词，
 目标：生成**严格符合 sprites.confirmo.love 规范**的 8×7 精灵图（Sprite Sheet）。

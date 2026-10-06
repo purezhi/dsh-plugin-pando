@@ -1,0 +1,27 @@
+# Pando companion plugin: a UI plugin whose browser half is discovered via
+# the package.json dshClient declaration, plus a node half that registers the
+# /pando/* routes on the DSH web server.
+#
+# This is the bundle's own insert row. To configure it, add an id-targeted
+# override to the PROFILE patch layer (~/.dsh/profiles/<profile>/cordis.patch.yml)
+# — do not add another insert row here or in the profile patch, that would
+# declare the same id twice:
+#
+#   - id: pando
+#     config:
+#       # Directory of local sprite sheets, laid out as
+#       # <name>/sheet.png (+ optional thumb.png / sprite.json). Its sprites are
+#       # served at /pando/local/<name>/… and listed by
+#       # /pando/local-sprites, which is what puts them in the pet's menu.
+#       # Searched before the package's bundled assets/ (qpanda).
+#       # `~` expands to the home directory.
+#       spriteDir: ~/my-sprites
+#       # On-disk cache for community sheets downloaded through
+#       # /pando/sprite/<id>. Defaults to <DSH_HOME>/cache/pando.
+#       cacheDir: ~/pando-cache
+#
+# Both keys are optional: with no config the plugin serves only its bundled
+# QPanda sprite and caches downloads under <DSH_HOME>/cache/pando.
+- insert:
+    - id: pando
+      name: "@purezhi/dsh-plugin-pando"

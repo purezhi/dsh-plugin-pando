@@ -13,7 +13,7 @@ docs/sprites/<sprite-id>/
 
 ## 来源
 
-- 清单：`dsh-plugin-confirmo/sprite_list.json`（60 个热门 sprite 的 URL）
+- 清单：`dsh-plugin-pando/sprite_list.json`（60 个热门 sprite 的 URL）
 - 服务器：`pub-sprites.confirmo.love`（素材版权归各上传作者所有，仅作本地归档）
 - 下载时间：2026-08
 
@@ -25,6 +25,6 @@ docs/sprites/<sprite-id>/
 node docs/sprites/download-sprites.mjs
 ```
 
-脚本会读取 `dsh-plugin-confirmo/sprite_list.json`，按每个 sprite 的
+脚本会读取 `dsh-plugin-pando/sprite_list.json`，按每个 sprite 的
 `spriteUrl` / `thumbnailUrl` / `processedThumbnailUrl` 字段下载到对应 `<sprite-id>/` 文件夹。
 已存在且大小相同的文件会跳过（断点续传），可随时重复运行。
