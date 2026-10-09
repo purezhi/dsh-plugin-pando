@@ -1,6 +1,6 @@
 {
   "name": "@purezhi/dsh-plugin-pando",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "description": "Pando desktop pet for the DSH UI: a replica of the confirmo.love companion, with a local sprite directory and community sprites. Drag to move, right-click to switch sprite, click to interact.",
   "type": "module",
   "main": "lib/index.js",
@@ -21,9 +21,12 @@
     "lib/client.js",
     "lib/types/**/*.d.ts",
     "locale/*.json",
-    "assets/**",
+    "assets/**/sheet.png",
+    "assets/**/thumb.png",
+    "assets/**/sprite.json",
     "cordis.patch.yml",
     "README.md",
+    "LICENSE",
     "icon.svg"
   ],
   "dsh": {
@@ -40,5 +43,25 @@
     "url": "https://github.com/purezhi/dsh-plugin-pando"
   },
   "license": "MIT",
+  "author": "purezhi",
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "plugin",
+    "desktop-pet",
+    "sprite",
+    "companion"
+  ],
+  "homepage": "https://github.com/purezhi/dsh-plugin-pando#readme",
+  "bugs": {
+    "url": "https://github.com/purezhi/dsh-plugin-pando/issues"
+  },
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": true,
   "icon": "./icon.svg"
 }

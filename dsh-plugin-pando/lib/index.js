@@ -60,6 +60,7 @@
  * tells the cordis loader to only apply this plugin once the webServer
  * service exists, so `ctx.webServer.register(...)` is safe to call.
  */
+import { readFileSync } from "node:fs";
 import { mkdir, readFile, readdir, rename, stat, writeFile } from "node:fs/promises";
 import { dirname, extname, isAbsolute, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -69,6 +70,18 @@ export const name = "pando";
 export const inject = ["webServer"];
 
 const PACKAGE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+/**
+ * This package's own metadata. The self-check route reports the package name and
+ * version, and reading them here keeps them from drifting away from
+ * package.json — a hardcoded copy did drift across releases.
+ */
+const PKG = (() => {
+  try {
+    return JSON.parse(readFileSync(join(PACKAGE_ROOT, "package.json"), "utf8"));
+  } catch (_) {
+    return {};
+  }
+})();
 /** Bundled sprites shipped inside the package (mj, mc, qpanda). */
 const ASSETS_DIR = join(PACKAGE_ROOT, "assets");
 /** Default cache location for downloaded community sheets. */
@@ -416,8 +429,8 @@ function apply(ctx, config) {
         } catch (_) {}
         res.writeHead(200, { "content-type": "application/json", "cache-control": "no-store" });
         res.end(JSON.stringify({
-          package: "@purezhi/dsh-plugin-pando",
-          version: "1.1.0",
+          package: PKG.name || "@purezhi/dsh-plugin-pando",
+          version: PKG.version || "0.0.0",
           configSchema: !!Schema,
           configKeys,
           configVolatile,
