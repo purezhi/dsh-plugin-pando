@@ -93,8 +93,12 @@ DSH Community Market 本身**不维护插件目录**，它是一个「壳」：�
 
 ### 本插件的提交记录
 
-- PR: https://github.com/imsai-sh/awesome-deepseek-harness-plugins/pull/174（已合并）
+- **npm**: `@purezhi/dsh-plugin-pando@1.0.0`（2026-10-06 发布；13 个文件，含 README/LICENSE/types）
+- **PR（改名后重新收录）**: https://github.com/imsai-sh/awesome-deepseek-harness-plugins/pull/573（待维护者审核）
+  - 删除旧条目 `catalog/plugins/purezhi--dsh-plugin-confirmo.json`，新增 `purezhi--dsh-plugin-pando.json`
+  - 走的是「更新/移除既有条目」路径，因此需要人工审核，不是自动合并
 - 投稿文件: `docs/submission/purezhi--dsh-plugin-pando.json`
+- 历史: 旧条目 PR #174（已合并，id 为 `purezhi/dsh-plugin-confirmo`），已由 #573 取代
 - 合并后 `Catalog sync` workflow 会推送目录到 deepseek1024.com（同步为异步排队，稍候可见）
 
 ### （可选）让插件进入市场「可安装」标签页
