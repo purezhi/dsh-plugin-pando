@@ -10,7 +10,7 @@
 
 | 待机 | 拖拽 | 工作状态 |
 |---|---|---|
-| ![默认](docs/screenshots/shot-idle.png) | ![待机](docs/screenshots/shot-drag.png) | ![工作状态](docs/screenshots/shot-working.png) |
+| ![待机](docs/screenshots/shot-idle.png) | ![拖拽](docs/screenshots/shot-drag.png) | ![工作状态](docs/screenshots/shot-working.png) |
 
 | 开心 | 兴奋 | 睡觉 |
 |---|---|---|
