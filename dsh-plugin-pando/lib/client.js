@@ -83,8 +83,13 @@ window.__ModuleLoader__.load({
 			'.dsh-pando .cf-canvas{width:100%;height:100%;}' +
 			'.dsh-pando .cf-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#8a6d1f;font:11px/1.4 system-ui,sans-serif;text-align:center;background:rgba(255,251,235,0.55);border-radius:12px;backdrop-filter:blur(2px);z-index:2;}' +
 			'.cf-work-symbols{position:absolute;inset:-10px -30px -14px -30px;pointer-events:none;z-index:3;}' +
-			'.cf-sym{position:absolute;opacity:0;line-height:1;will-change:transform,opacity;animation:cf-sym-burst 3s cubic-bezier(.35,.1,.35,1) infinite;}' +
-			'.cf-sym-code{display:inline-block;font-weight:400;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;}' +
+			'.cf-sym{position:absolute;opacity:0;line-height:1;will-change:transform,opacity;animation:cf-sym-burst 4.5s cubic-bezier(.35,.1,.35,1) infinite;}' +
+			// Code symbols: bold monospace, plus a halo. The pastel palette has to
+			// stay legible over both light and dark app surfaces, so the glyph gets
+			// a thin white contour (which also crisps up the 15px strokes), a soft
+			// halo in its own hue (currentColor picks up the inline per-symbol
+			// colour) and a faint dark drop for contrast on light backgrounds.
+			'.cf-sym-code{display:inline-block;font-weight:900;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;-webkit-text-stroke:0.5px rgba(255,255,255,0.92);text-shadow:0 0 1px rgba(255,255,255,0.95),0 0 4px rgba(255,255,255,0.75),0 0 8px currentColor,0 1px 2px rgba(0,0,0,0.18);}' +
 			'.cf-gear{position:absolute;left:-4px;top:0;font-size:42px;line-height:1;z-index:3;filter:drop-shadow(0 2px 4px rgba(0,0,0,.45));}' +
 			'.cf-gear .cf-sym-spin{display:inline-block;animation:cf-spin 6s linear infinite;background:linear-gradient(160deg,#ffffff 0%,#dfe6ee 18%,#aeb9c6 45%,#7e8a97 62%,#c3ccd6 76%,#6b7683 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}' +
 			'.cf-loading-dots{position:absolute;right:-34px;top:0;display:flex;gap:6px;z-index:3;}' +
@@ -1544,7 +1549,7 @@ window.__ModuleLoader__.load({
 					inner.className = "cf-sym-code";   // all programming symbols, monospace
 					inner.textContent = g;
 					s.appendChild(inner);
-					var durSec = 2.6 + Math.random() * 2.0;                 // 2.6-4.6s rise
+					var durSec = 3.9 + Math.random() * 3.0;                 // 3.9-6.9s rise (was 2.6-4.6: 1/3 slower)
 					var dur = durSec.toFixed(2) + "s";
 					var delay = (Math.random() * 3.2).toFixed(2) + "s";    // 0-3.2s
 					var swayDur = Math.max(1.0, durSec / 2).toFixed(2) + "s";  // ~half the rise: quicker sway
@@ -1553,7 +1558,7 @@ window.__ModuleLoader__.load({
 					// layer instead of colliding
 					s.style.left = Math.round(40 + order[i] * bandW + Math.random() * bandW) + "px";
 					s.style.top = Math.round(-(8 + Math.random() * 46)) + "px";
-					s.style.fontSize = "16px";   // uniform size
+					s.style.fontSize = "15px";   // uniform size
 					s.style.color = colors[i];
 					s.style.zIndex = 1 + Math.floor(Math.random() * 4);
 					// rise upward (slight drift) while the inner glyph sways side to side
@@ -1657,7 +1662,10 @@ window.__ModuleLoader__.load({
 				workingFlag = w;
 				if (w) {
 					workStartedAt = Date.now();
-					showWorkSymbols();
+					// While the pet is being dragged the drag pose wins, so the
+					// decorations must not pop up mid-drag: endDrag() shows them once
+					// the pointer is released and the pet is still working.
+					if (!dragging) showWorkSymbols();
 					playBase();
 				} else {
 					hideWorkSymbols();
@@ -1910,7 +1918,16 @@ window.__ModuleLoader__.load({
 				if (!dragging) return;
 				var dx = e.clientX - startX, dy = e.clientY - startY;
 				if (Math.abs(dx) + Math.abs(dy) > 5) {
-					moved = true;
+					if (!moved) {
+						moved = true;
+						// A real drag begins. The working decorations (gear, loading
+						// dots, floating symbols) belong to the working pose, so drop
+						// them until the pointer is released. This is deliberately not
+						// tied to `sprite`: the decorations are also shown over the
+						// fallback cat, so a failed sheet load must not leave them
+						// hanging on the dragging pet either.
+						hideWorkSymbols();
+					}
 					if (sprite && !dragRowOn) { dragRowOn = true; playRow(ROW_DRAG, false); }
 				}
 				var maxY = window.innerHeight - root.offsetHeight - 6;
@@ -1927,6 +1944,11 @@ window.__ModuleLoader__.load({
 					writeStore(state);
 					playBase();
 				}
+				// Back on the base pose: the working decorations return. The guard on
+				// workSymsEl covers both paths — hidden for the drag, and deferred
+				// because the agent started working while the pointer was down (a
+				// plain click that never moved must not lose them either).
+				if (workingFlag && !workSymsEl) showWorkSymbols();
 			}
 			root.addEventListener("pointerup", endDrag);
 			root.addEventListener("pointercancel", endDrag);
