@@ -1,6 +1,6 @@
 {
   "name": "@purezhi/dsh-plugin-pando",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Pando desktop pet for the DSH UI: a replica of the confirmo.love companion, with a local sprite directory and community sprites. Drag to move, right-click to switch sprite, click to interact.",
   "type": "module",
   "main": "lib/index.js",
