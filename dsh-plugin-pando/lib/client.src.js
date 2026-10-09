@@ -1553,7 +1553,7 @@ window.__ModuleLoader__.load({
 					// layer instead of colliding
 					s.style.left = Math.round(40 + order[i] * bandW + Math.random() * bandW) + "px";
 					s.style.top = Math.round(-(8 + Math.random() * 46)) + "px";
-					s.style.fontSize = "19px";   // uniform size
+					s.style.fontSize = "16px";   // uniform size
 					s.style.color = colors[i];
 					s.style.zIndex = 1 + Math.floor(Math.random() * 4);
 					// rise upward (slight drift) while the inner glyph sways side to side
